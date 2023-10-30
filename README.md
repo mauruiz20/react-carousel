@@ -1,3 +1,7 @@
+# React carousel
+
+https://github.com/mauruiz20/react-carousel/assets/69861356/4bdaa5f1-e62e-447c-8407-7463a542e7c9
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
