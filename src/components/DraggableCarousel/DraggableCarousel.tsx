@@ -1,17 +1,19 @@
-import { useRef } from 'react'
-import {
-  Box,
-  Carousel,
-  DraggableCarouselContainer
-} from './DraggableCarouselStyled'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Draggable from 'gsap/Draggable'
+import { useRef, useState } from 'react'
+import {
+  Box,
+  Carousel,
+  Cover,
+  DraggableCarouselContainer
+} from './DraggableCarouselStyled'
 
 const BOXES = [1, 2, 3, 4, 5]
 
 const DraggableCarousel: React.FC = () => {
   const carouselContainerRef = useRef<HTMLDivElement>(null)
+  const [slidesToShow, setSlidesToShow] = useState(1)
 
   useGSAP(
     () => {
@@ -19,9 +21,12 @@ const DraggableCarousel: React.FC = () => {
 
       const carouselWidth = gsap.getProperty('#carousel', 'width') as number
       const boxWidth = gsap.getProperty('.box', 'width') as number
+      const coverWidth = carouselWidth - boxWidth * slidesToShow
+
+      gsap.set('.cover', { width: coverWidth })
 
       gsap.set(carouselContainerRef.current, {
-        width: carouselWidth * 2 - boxWidth
+        width: carouselWidth * 2 - boxWidth * slidesToShow
       })
 
       let initialX = 0
@@ -72,18 +77,27 @@ const DraggableCarousel: React.FC = () => {
 
       Draggable.create('#carousel', {
         type: 'x',
-        edgeResistance: 0.9,
+        edgeResistance: slidesToShow === BOXES.length ? 1 : 0.9,
         dragResistance: 0.5,
         bounds: carouselContainerRef.current,
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd
       })
     },
-    { scope: carouselContainerRef }
+    { scope: carouselContainerRef, dependencies: [slidesToShow] }
   )
 
   return (
     <DraggableCarouselContainer ref={carouselContainerRef}>
+      <Cover className='cover' />
+      <input
+        type='range'
+        min='1'
+        max={BOXES.length}
+        value={slidesToShow}
+        onChange={(e) => setSlidesToShow(Number(e.target.value))}
+      />
+      <label>{slidesToShow}</label>
       <Carousel id='carousel'>
         {BOXES.map((box) => (
           <Box key={box} className='box'>
@@ -91,6 +105,7 @@ const DraggableCarousel: React.FC = () => {
           </Box>
         ))}
       </Carousel>
+      <Cover className='cover' />
     </DraggableCarouselContainer>
   )
 }
