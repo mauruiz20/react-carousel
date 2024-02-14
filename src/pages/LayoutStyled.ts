@@ -18,7 +18,7 @@ export const Container = styled.main`
   overflow: hidden;
 `
 
-export const SimpleCarouselContainer = styled.section`
+export const ReactCarouselContainer = styled.section`
   width: 100%;
   display: flex;
   flex-direction: column;

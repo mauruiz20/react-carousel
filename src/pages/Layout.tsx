@@ -1,10 +1,10 @@
 import { Container, Title } from './LayoutStyled'
-import SimpleCarousels from './SimpleCarousels/SimpleCarousels'
+import SimpleCarousels from './ReactCarousel/ReactCarousels'
 
 const Layout: React.FC = () => {
   return (
     <Container>
-      <Title>React Carousel</Title>
+      <Title>Carousels</Title>
       <SimpleCarousels />
     </Container>
   )
