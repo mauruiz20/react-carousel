@@ -1,11 +1,13 @@
+import GSAPCarousel from './GSAPCarousel/GSAPCarousel'
 import { Container, Title } from './LayoutStyled'
-import SimpleCarousels from './ReactCarousel/ReactCarousels'
+import ReactCarousels from './ReactCarousel/ReactCarousels'
 
 const Layout: React.FC = () => {
   return (
     <Container>
       <Title>Carousels</Title>
-      <SimpleCarousels />
+      <GSAPCarousel />
+      <ReactCarousels />
     </Container>
   )
 }
