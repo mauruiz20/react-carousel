@@ -76,3 +76,21 @@ export const Box = styled.div`
     transform: translateX(-50%);
   }
 `
+
+export const DotContainer = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+export const Dot = styled.button`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: lightgray;
+`

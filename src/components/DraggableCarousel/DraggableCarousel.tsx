@@ -4,6 +4,8 @@ import {
   Box,
   Carousel,
   Cover,
+  Dot,
+  DotContainer,
   DraggableCarouselContainer
 } from './DraggableCarouselStyled'
 
@@ -12,7 +14,7 @@ const BOXES = [1, 2, 3, 4, 5]
 const DraggableCarousel: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [visibleSlides, setVisibleSlides] = useState<number>(1)
-  useCarousel({ containerRef, visibleSlides })
+  const { handleClickDot } = useCarousel({ containerRef, visibleSlides })
 
   const handleSlideChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setVisibleSlides(Number(evt.target.value))
@@ -36,6 +38,15 @@ const DraggableCarousel: React.FC = () => {
           </Box>
         ))}
       </Carousel>
+      <DotContainer>
+        {BOXES.map((box, index) => (
+          <Dot
+            key={box}
+            className='dot'
+            onClick={() => handleClickDot(index)}
+          />
+        ))}
+      </DotContainer>
       <Cover className='cover' />
     </DraggableCarouselContainer>
   )

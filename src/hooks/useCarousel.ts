@@ -11,7 +11,7 @@ const useCarousel = ({
   containerRef,
   visibleSlides = 1
 }: useCarouselInterface) => {
-  useGSAP(
+  const { contextSafe } = useGSAP(
     () => {
       gsap.registerPlugin(Draggable)
 
@@ -26,6 +26,26 @@ const useCarousel = ({
         width: carouselWidth * 2 - boxWidth * visibleSlides
       })
 
+      const dotsTl = gsap.timeline({ id: 'dotsTl', paused: true })
+
+      dotsTl.to(
+        '.dot',
+        {
+          stagger: { each: 1, yoyo: true, repeat: 1 },
+          backgroundColor: 'black'
+        },
+        0.5
+      )
+
+      gsap.set(dotsTl, { time: 1 })
+
+      const handleDot = () => {
+        const carouselX = gsap.getProperty('#carousel', 'x') as number
+        const nextBox = carouselX / boxWidth
+
+        gsap.set(dotsTl, { time: Math.abs(nextBox) + 1 })
+      }
+
       const moveToNearSlide = () => {
         const carouselX = Math.abs(gsap.getProperty('#carousel', 'x') as number)
         const nextBox = Math.round(carouselX / boxWidth)
@@ -33,7 +53,8 @@ const useCarousel = ({
         gsap.to('#carousel', {
           x: nextBox * -boxWidth,
           ease: 'none',
-          duration: 0.2
+          duration: 0.4,
+          onUpdate: handleDot
         })
       }
 
@@ -42,11 +63,21 @@ const useCarousel = ({
         edgeResistance: visibleSlides === boxes.length ? 1 : 0.9,
         dragResistance: 0.5,
         bounds: containerRef.current,
+        onDrag: handleDot,
         onDragEnd: moveToNearSlide
       })
     },
     { scope: containerRef, dependencies: [visibleSlides] }
   )
+
+  const handleClickDot = contextSafe((index: number) => {
+    const boxWidth = gsap.getProperty('.box', 'width') as number
+    const dotsTl = gsap.getById('dotsTl')
+    gsap.set(dotsTl, { time: index + 1 })
+    gsap.to('#carousel', { x: boxWidth * -index })
+  })
+
+  return { handleClickDot }
 }
 
 export default useCarousel
