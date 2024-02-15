@@ -39,7 +39,7 @@ const DraggableCarousel: React.FC = () => {
         ))}
       </Carousel>
       <DotContainer>
-        {BOXES.map((box, index) => (
+        {BOXES.slice(0, BOXES.length - visibleSlides + 1).map((box, index) => (
           <Dot
             key={box}
             className='dot'

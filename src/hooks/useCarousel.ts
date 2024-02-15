@@ -27,22 +27,24 @@ const useCarousel = ({
       })
 
       const dotsTl = gsap.timeline({ id: 'dotsTl', paused: true })
+      dotsTl.set('.dot', { backgroundColor: 'lightgray' })
 
       dotsTl.to(
         '.dot',
         {
-          stagger: { each: 1, yoyo: true, repeat: 1 },
+          stagger: { each: 1, yoyo: true, repeat: 1, repeatDelay: 0.5 },
           backgroundColor: 'black'
         },
         0.5
       )
 
-      gsap.set(dotsTl, { time: 1 })
+      const carouselX = gsap.getProperty('#carousel', 'x') as number
+      const nextBox = carouselX / boxWidth
+      gsap.set(dotsTl, { time: Math.abs(nextBox) + 1 })
 
       const handleDot = () => {
         const carouselX = gsap.getProperty('#carousel', 'x') as number
         const nextBox = carouselX / boxWidth
-
         gsap.set(dotsTl, { time: Math.abs(nextBox) + 1 })
       }
 
