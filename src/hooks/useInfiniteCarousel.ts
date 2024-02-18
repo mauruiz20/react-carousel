@@ -5,6 +5,7 @@ import { useState } from 'react'
 interface InfiniteCarouselInterface<T, J extends gsap.TweenTarget> {
   items: T[]
   ref: React.RefObject<J>
+  visibleSlides?: number
   sliderId?: string
   slideClassName?: string
 }
@@ -12,6 +13,7 @@ interface InfiniteCarouselInterface<T, J extends gsap.TweenTarget> {
 const useInfiniteCarousel = <T, J extends gsap.TweenTarget>({
   items,
   ref,
+  visibleSlides = items.length,
   sliderId = 'slider',
   slideClassName = 'slide'
 }: InfiniteCarouselInterface<T, J>) => {
@@ -25,11 +27,12 @@ const useInfiniteCarousel = <T, J extends gsap.TweenTarget>({
     () => {
       const slides = gsap.utils.toArray<HTMLDivElement>(`.${slideClassName}`)
       const slideWidth = gsap.getProperty(slides[0], 'width') as number
-      const sliderWidth = slideWidth * (slides.length - 2)
+      const sliderWidth = slideWidth * visibleSlides
 
       gsap.set(ref.current, { width: sliderWidth })
+      gsap.set(`#${sliderId}`, { x: -slideWidth })
     },
-    { scope: ref }
+    { scope: ref, dependencies: [visibleSlides] }
   )
 
   const prev = contextSafe(() => {
@@ -39,7 +42,7 @@ const useInfiniteCarousel = <T, J extends gsap.TweenTarget>({
 
     gsap.fromTo(
       `#${sliderId}`,
-      { x: -slideWidth },
+      { x: -2 * slideWidth },
       { x: `+=${slideWidth}`, duration: 0.25 }
     )
 
@@ -58,7 +61,7 @@ const useInfiniteCarousel = <T, J extends gsap.TweenTarget>({
 
     gsap.fromTo(
       `#${sliderId}`,
-      { x: slideWidth },
+      { x: 0 },
       { x: `-=${slideWidth}`, duration: 0.25 }
     )
 

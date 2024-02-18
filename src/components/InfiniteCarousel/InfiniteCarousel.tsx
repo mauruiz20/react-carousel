@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import useInfiniteCarousel from '../../hooks/useInfiniteCarousel'
 import {
   Button,
   ButtonContainer,
   InfiniteCarouselContainer,
+  RangeContainer,
   Slide,
   Slider
 } from './InfiniteCarouselStyled'
@@ -27,6 +28,8 @@ const SLIDER_ID = 'slider'
 const SLIDE_CLASS_NAME = 'slide'
 
 const InfiniteCarousel: React.FC = () => {
+  const [visibleSlides, setVisibleSlides] = useState<number>(SLIDES.length)
+  const [overflow, setOverflow] = useState<boolean>(false)
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const { slides, prev, next } = useInfiniteCarousel<
@@ -35,24 +38,49 @@ const InfiniteCarousel: React.FC = () => {
   >({
     items: SLIDES,
     ref: carouselRef,
+    visibleSlides,
     sliderId: SLIDER_ID,
     slideClassName: SLIDE_CLASS_NAME
   })
 
   return (
-    <InfiniteCarouselContainer ref={carouselRef}>
-      <Slider id={SLIDER_ID}>
-        {slides.map((slide, index) => (
-          <Slide key={index} className={SLIDE_CLASS_NAME} $color={slide.color}>
-            {slide.name}
-          </Slide>
-        ))}
-      </Slider>
+    <>
+      <RangeContainer>
+        <input
+          type='range'
+          min={1}
+          max={SLIDES.length}
+          value={visibleSlides}
+          onChange={(e) => setVisibleSlides(parseInt(e.target.value))}
+        />
+        <label>{visibleSlides}</label>
+      </RangeContainer>
+      <RangeContainer>
+        <label>Overflow?</label>
+        <input
+          type='checkbox'
+          checked={overflow}
+          onChange={(e) => setOverflow(e.target.checked)}
+        />
+      </RangeContainer>
+      <InfiniteCarouselContainer ref={carouselRef} $overflow={overflow}>
+        <Slider id={SLIDER_ID}>
+          {slides.map((slide, index) => (
+            <Slide
+              key={index}
+              className={SLIDE_CLASS_NAME}
+              $color={slide.color}
+            >
+              {slide.name}
+            </Slide>
+          ))}
+        </Slider>
+      </InfiniteCarouselContainer>
       <ButtonContainer>
         <Button onClick={prev}>Prev</Button>
         <Button onClick={next}>Next</Button>
       </ButtonContainer>
-    </InfiniteCarouselContainer>
+    </>
   )
 }
 

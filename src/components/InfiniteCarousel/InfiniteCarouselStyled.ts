@@ -1,18 +1,19 @@
 import styled from 'styled-components'
 
+interface CarouselProps {
+  $overflow: boolean
+}
+
 interface SlideProps {
   $color: string
 }
 
-export const InfiniteCarouselContainer = styled.div`
+export const InfiniteCarouselContainer = styled.div<CarouselProps>`
   display: flex;
   position: relative;
   padding: 40px 0;
-  padding-bottom: 100px;
   background-color: white;
-  margin-bottom: 50px;
-  justify-content: center;
-  overflow: hidden;
+  overflow: ${(props) => (props.$overflow ? 'hidden' : 'visible')};
 `
 
 export const Slider = styled.div`
@@ -30,10 +31,6 @@ export const Slide = styled.div<SlideProps>`
 `
 
 export const ButtonContainer = styled.div`
-  position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translate(-50%);
   display: flex;
   gap: 10px;
 `
@@ -45,4 +42,10 @@ export const Button = styled.button`
   font-size: 16px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+`
+
+export const RangeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `
