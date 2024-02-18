@@ -3,6 +3,7 @@ import useInfiniteCarousel from '../../hooks/useInfiniteCarousel'
 import {
   Button,
   ButtonContainer,
+  Container,
   InfiniteCarouselContainer,
   RangeContainer,
   Slide,
@@ -29,7 +30,7 @@ const SLIDE_CLASS_NAME = 'slide'
 
 const InfiniteCarousel: React.FC = () => {
   const [visibleSlides, setVisibleSlides] = useState<number>(SLIDES.length)
-  const [overflow, setOverflow] = useState<boolean>(false)
+  const [overflow, setOverflow] = useState<boolean>(true)
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const { slides, prev, next } = useInfiniteCarousel<
@@ -44,7 +45,7 @@ const InfiniteCarousel: React.FC = () => {
   })
 
   return (
-    <>
+    <Container>
       <RangeContainer>
         <input
           type='range'
@@ -80,7 +81,7 @@ const InfiniteCarousel: React.FC = () => {
         <Button onClick={prev}>Prev</Button>
         <Button onClick={next}>Next</Button>
       </ButtonContainer>
-    </>
+    </Container>
   )
 }
 

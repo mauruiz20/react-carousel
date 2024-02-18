@@ -8,6 +8,13 @@ interface SlideProps {
   $color: string
 }
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+`
+
 export const InfiniteCarouselContainer = styled.div<CarouselProps>`
   display: flex;
   position: relative;
